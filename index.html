@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SOSPEDRA | Sastrería de Lujo</title>
+    <!-- Etiquetas SEO -->
+    <meta name="description"
+        content="Sastrería Sospedra: Confección a medida con las mejores telas y especificaciones técnicas para cada prenda.">
+
+    <!-- Fuentes -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Playfair+Display:wght@700&display=swap"
+        rel="stylesheet">
+
+    <!-- Estilos -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+    <header>
+        <a class="logo">SOSPEDRA<span>1919</span></a>
+        <nav>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="./index.html" data-i18n="nav_home">Inicio</a></li>
+                <li><a href="#catalogo" data-i18n="nav_catalog">Catálogo</a></li>
+                <li><a href="#historia" data-i18n="nav_history">Nuestra Historia</a></li>
+                <li><a href="#contacto" data-i18n="nav_contact">Contacto</a></li>
+            </ul>
+            <div class="lang-selector">
+                <button class="lang-btn active" data-lang="es">ES</button>
+                <button class="lang-btn" data-lang="ca">CA</button>
+            </div>
+            <div class="menu-toggle" id="menuToggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Fuente de traducciones para JS (Oculto) -->
+    <div id="i18n-source" style="display: none;">
+        <span data-i18n="ver_detalles">Ver más fotos →</span>
+        <span data-i18n="descripcion_label">Descripción</span>
+        <span data-i18n="material_label">Material</span>
+        <span data-i18n="no_entries">No se encontraron prendas.</span>
+        <span data-i18n="contact_prompt">Para más información o pedidos personalizados, contáctenos directamente.</span>
+    </div>
+
+    <main>
+        <div id="catalogView">
+            <section class="hero">
+                <h1 class="animate-fade logo" data-i18n="hero_title">Trajes de hombre desde <span>1919</span></h1>
+                <p class="animate-fade" data-i18n="hero_subtitle">Desde hace más de un siglo, en Sastrería Sospedra
+                    confeccionamos trajes con el equilibrio perfecto entre tradición artesana y elegancia contemporánea.
+                </p>
+            </section>
+
+            <section class="container" id="catalogo">
+                <div class="catalog-header animate-fade">
+                    <h2 class="serif" data-i18n="catalog_title">Catálogo</h2>
+                    <div class="header-line"></div>
+                    <span class="detail-type" data-i18n="catalog_label">¡Más prendas en tienda!</span>
+                </div>
+                <div class="filters-bar animate-fade">
+                    <div class="filter-group">
+                        <div class="select-wrapper">
+                            <select id="typeFilter">
+                                <option value="all" data-i18n="filter_types">Tipos de Prenda</option>
+                                <!-- Opciones dinamicas -->
+                            </select>
+                        </div>
+                        <div class="input-wrapper">
+                            <input type="number" id="perPageFilter" value="6" min="1" max="100" placeholder="6">
+                        </div>
+                        <div class="results-info centered-text">
+                            <span id="totalResults">0</span>
+                            <span data-i18n="results_label">resultados</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="catalogGrid" class="catalog-grid animate-fade" style="animation-delay: 0.6s;">
+                    <!-- Tarjetas de productos serán insertadas aquí -->
+                </div>
+
+                <div id="paginationControls" class="pagination animate-fade">
+                    <!-- Controles de paginación generados dinámicamente -->
+                </div>
+            </section>
+            <section id="historia" class="history-section animate-fade">
+                <div class="container history-container">
+                    <div class="history-image">
+                        <img src="./img/escaparate.png"
+                            alt="Historia Sospedra">
+                    </div>
+                    <div class="history-text">
+                        <span class="detail-type" data-i18n="history_label">Desde 1919</span>
+                        <h2 class="serif" data-i18n="history_title">Una Tradición Centenaria</h2>
+                        <p data-i18n="history_p1">En nuestra sastrería, cada prenda es única porque está pensada
+                            exclusivamente para ti. Desde la elección de los tejidos hasta el menor detalle, trabajamos
+                            para que el vestido refleje tu personalidad y estilo.</p>
+                        <p data-i18n="history_p2">Con más de 100 años de experiencia en Barcelona, ​​unimos tradición
+                            artesana y técnicas actuales para conseguir un resultado impecable que se adapta
+                            perfectamente a tu cuerpo ya tu forma de vivir.</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <section id="detailView" class="detail-section" style="display: none;">
+            <div class="container">
+                <div id="closeDetail" class="back-button" data-i18n="back_to_catalog">← Volver al catálogo</div>
+                <div id="detailContent">
+                    <!-- Contenido dinámico de la tarjeta -->
+                </div>
+            </div>
+        </section>
+    </main>
+    <footer id="contacto">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <a class="logo" style="color: white;">SOSPEDRA<span>1919</span></a>
+                <p data-i18n="footer_desc">Artesanía y elegancia en cada puntada. Sastrería de lujo dedicada a la
+                    confección a medida con los
+                    mejores materiales del mundo desde hace más de un siglo.</p>
+            </div>
+            <div class="footer-links">
+                <h4 data-i18n="footer_nav_title">Navegación</h4>
+                <ul>
+                    <li><a href="./index.html" data-i18n="nav_home">Inicio</a></li>
+                    <li><a href="#catalogo" data-i18n="nav_catalog">Catálogo</a></li>
+                    <li><a href="#historia" data-i18n="nav_history">Nuestra Historia</a></li>
+                </ul>
+            </div>
+            <div class="footer-contact">
+                <h4 data-i18n="footer_contact_title">Contacto</h4>
+                <div class="footer-contact-item">
+                    <div class="contact-icon">📍</div>
+                    <p>Carrer de Sants, 59, Sants-Montjuïc, 08014 Barcelona</p>
+                </div>
+                <div class="footer-contact-item">
+                    <div class="contact-icon">📞</div>
+                    <p>+34 934 21 17 49</p>
+                </div>
+                <div class="footer-contact-item">
+                    <div class="contact-icon">✉️</div>
+                    <p>sastresospedra@telefonica.net</p>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p class="copyright" data-i18n="footer_copyright">&copy; 2025 SOSPEDRA 1919. Colección Exclusiva.</p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="js/app.js"></script>
+</body>
+
+</html>
