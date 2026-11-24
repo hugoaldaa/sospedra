@@ -1,5 +1,20 @@
-// Configuración
-const API_URL = 'bd/api.php';
+// Cliente REST de Supabase (PostgREST)
+function supabaseFetch(path) {
+    return fetch(`${SUPABASE_URL}/rest/v1/${path}`, {
+        headers: {
+            'apikey': SUPABASE_ANON_KEY,
+            'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
+        }
+    });
+}
+
+async function readJsonOrThrow(response) {
+    if (!response.ok) {
+        const body = await response.text();
+        throw new Error(`Supabase ${response.status}: ${body}`);
+    }
+    return response.json();
+}
 
 // Estado de la aplicación
 let allPrendas = [];
@@ -82,14 +97,30 @@ function captureOriginalTexts() {
 async function initApp() {
     updateStaticTexts();
     try {
-        const response = await fetch(`${API_URL}?action=catalog&lang=${currentLang}`);
-        const data = await response.json();
+        const lang = currentLang === 'ca' ? 'ca' : 'es';
+        const [prendasRes, tiposRes] = await Promise.all([
+            supabaseFetch('prendas?select=id,imagen,id_tipo_prenda,nombre_es,nombre_ca'),
+            supabaseFetch('tipos_de_prendas?select=id,nombre_es,nombre_ca')
+        ]);
+        const [prendasData, tiposData] = await Promise.all([
+            readJsonOrThrow(prendasRes),
+            readJsonOrThrow(tiposRes)
+        ]);
 
-        if (data.error) throw new Error(data.error);
+        const tiposPorId = {};
+        allTipos = tiposData.map(t => {
+            tiposPorId[t.id] = t[`nombre_${lang}`];
+            return { id: t.id, nombre: t[`nombre_${lang}`] };
+        });
 
-        allPrendas = data.prendas;
+        allPrendas = prendasData.map(p => ({
+            id: p.id,
+            imagen: p.imagen,
+            id_tipo_prenda: p.id_tipo_prenda,
+            nombre: p[`nombre_${lang}`],
+            tipo_nombre: tiposPorId[p.id_tipo_prenda] || ''
+        }));
         activePrendas = [...allPrendas];
-        allTipos = data.tipos;
 
         initFilters();
         renderCatalog();
@@ -250,12 +281,26 @@ function changePage(newPage) {
 // Open Detail Page
 async function openDetail(id) {
     try {
-        const response = await fetch(`${API_URL}?action=detail&id=${id}&lang=${currentLang}`);
-        const prenda = await response.json();
+        const lang = currentLang === 'ca' ? 'ca' : 'es';
+        const [prendaRes, imagenesRes] = await Promise.all([
+            supabaseFetch(`prendas?id=eq.${encodeURIComponent(id)}&select=id,imagen,nombre_es,nombre_ca`),
+            supabaseFetch(`prendas_imagenes?id_prenda=eq.${encodeURIComponent(id)}&select=ruta&order=orden.asc`)
+        ]);
+        const [prendasData, imagenesData] = await Promise.all([
+            readJsonOrThrow(prendaRes),
+            readJsonOrThrow(imagenesRes)
+        ]);
 
-        if (prenda.error) throw new Error(prenda.error);
+        const p = prendasData[0];
+        if (!p) throw new Error('Prenda no encontrada');
 
-        const imagenes = prenda.todas_imagenes || [prenda.imagen];
+        const prenda = {
+            id: p.id,
+            imagen: p.imagen,
+            nombre: p[`nombre_${lang}`]
+        };
+        const rutas = imagenesData.map(i => i.ruta);
+        const imagenes = rutas.length ? rutas : [prenda.imagen];
         const t = translations[currentLang];
 
         detailContent.innerHTML = `
